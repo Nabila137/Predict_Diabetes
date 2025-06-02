@@ -2,6 +2,9 @@ package JavaFrontEnd;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,7 +103,6 @@ public class DiabetesAssistant extends JFrame {
         cardPanel.setBackground(bgColor);
         
         createWelcomePanel();
-        //createFeelingPanels();
         createDiabetesCheckPanel();
         createTestIntroPanel();
         createPregnancyPanel();
@@ -133,15 +135,13 @@ public class DiabetesAssistant extends JFrame {
         
         RoundedButton greatBtn = new RoundedButton("Feeling great!");
         styleButton(greatBtn, successColor);
-        greatBtn.addActionListener(e -> {
-        	//System.out.println ("Navigating to diabetes_check");        	
+        greatBtn.addActionListener(e -> {      	
         	cardLayout.show(cardPanel, "diabetes_check");
         });
         
         RoundedButton notGoodBtn = new RoundedButton("Not so good");
         styleButton(notGoodBtn, warningColor);
         notGoodBtn.addActionListener(e -> {
-        	//System.out.println("Navigating to diabetes_check");
         	cardLayout.show(cardPanel, "diabetes_check");
         });
         
@@ -153,20 +153,7 @@ public class DiabetesAssistant extends JFrame {
         panel.add(buttonPanel, BorderLayout.SOUTH);
         
         cardPanel.add(panel, "welcome");
-        //setVisible(true);
     }
-
-    /*private void createFeelingPanels() {
-    	 JPanel panel = new JPanel(new BorderLayout());
-         panel.setBackground(bgColor);
-         panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
-         JLabel title = new JLabel("Feelings pannel");
-         title.setFont(new Font("SansSerif", Font.BOLD, 28));
-         title.setForeground(primaryColor);
-         title.setHorizontalAlignment(SwingConstants.CENTER);
-         panel.add(title, BorderLayout.NORTH);
-        // Already handled in welcome panel
-    }*/
 
     private void createDiabetesCheckPanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -176,8 +163,6 @@ public class DiabetesAssistant extends JFrame {
         
         JLabel message = new JLabel("<html><div style='text-align: center;'>Taking care of your health is important.<br>Would you like to check your diabetes risk today?</div></html>");
         message.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        //message.setForeground(primaryColor);
-        //message.setForeground(new Color(100, 100, 100));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         
         JLabel quote = new JLabel("<html><div style='text-align: center;'><i>\"Prevention is better than cure.\"</i></div></html>");
@@ -191,7 +176,6 @@ public class DiabetesAssistant extends JFrame {
         RoundedButton yesBtn = new RoundedButton("Yes, let's do it");
         styleButton(yesBtn, successColor);
         yesBtn.addActionListener(e -> {
-        	//System.out.println("Navigating to test_intro");
         	cardLayout.show(cardPanel, "test_intro");
         });
         
@@ -403,7 +387,33 @@ public class DiabetesAssistant extends JFrame {
                 } else {
                     userData.put(config.name, String.valueOf(value));
                     attemptCount.put(config.name, 0); // Reset attempts
-                    cardLayout.show(cardPanel, nextCard);
+                    if (nextCard.equals("result")) {
+                    	
+                        if (checkAndHandleMissingValues()) {
+                        	String prediction = callModel();
+                        	
+                        	new Thread(() -> {
+                        	    try {
+                        	        Thread.sleep(3000); // 3 seconds
+                        	    } catch (InterruptedException ee) {
+                        	        //Nothing happens if the thread fails to sleep.
+                        	    }
+
+                        	    // Switch to final result panel on the Event Dispatch Thread
+                        	    SwingUtilities.invokeLater(() -> {
+                        	    	createFinalResultPanel(prediction);
+                        	        cardLayout.show(cardPanel, "result_final");
+                        	    });
+                        	}).start();
+
+                        } else {
+                        	JOptionPane.showMessageDialog(this, "Can't predict from the given values. The model needs all the information.", "Error", JOptionPane.WARNING_MESSAGE);
+                        	cardLayout.show(cardPanel, "welcome");
+                        }  
+                        
+                    } else {
+                        cardLayout.show(cardPanel, nextCard);
+                    }
                 }
             } catch (NumberFormatException ex) {
                 handleInvalidInput(config, "Please enter a valid number");
@@ -541,63 +551,6 @@ public class DiabetesAssistant extends JFrame {
 
         panel.add(topRight, BorderLayout.EAST); // Add to the EAST or NORTHEAST region
     }
-    
-    private String getDisplayName(String key) {
-        for (MeasurementConfig config : MEASUREMENTS) {
-            if (config.name.equals(key)) {
-                return config.displayName;
-            }
-        }
-        return key; // fallback
-    }
-
-
-
-   /* private void addBackButton(JPanel panel, String backScreen) {
-        RoundedButton backBtn = new RoundedButton("← Back");
-        backBtn.setBounds(20, 20, 100, 40);
-        backBtn.setBackground(new Color(149, 165, 166));
-        backBtn.addActionListener(e -> cardLayout.show(cardPanel, backScreen));
-        panel.setLayout(null);
-        panel.add(backBtn);
-    }
-
-    private void addExitButton(JPanel panel) {
-        RoundedButton exitBtn = new RoundedButton("Exit");
-        exitBtn.setBounds(getWidth() - 120, 20, 100, 40);
-        exitBtn.setBackground(new Color(149, 165, 166));
-        exitBtn.addActionListener(e -> {
-            userData.clear();
-            attemptCount.clear();
-            cardLayout.show(cardPanel, "welcome");
-        });
-        panel.add(exitBtn);
-    }*/
-
-    // Configuration class for measurements
-    /*static class MeasurementConfig {
-        String name;
-        String displayName;
-        String unit;
-        double min;
-        double max;
-        double absoluteMin;
-        double absoluteMax;
-        String instructions;
-        int ordinal;
-
-        public MeasurementConfig(String name, String displayName, String unit, 
-                                double min, double max, double absoluteMax, String instructions) {
-            this.name = name;
-            this.displayName = displayName;
-            this.unit = unit;
-            this.min = min;
-            this.max = max;
-            this.absoluteMin = 0;
-            this.absoluteMax = absoluteMax;
-            this.instructions = instructions;
-        }
-    }*/
 
     // Custom Rounded Button
     static class RoundedButton extends JButton {
@@ -627,12 +580,141 @@ public class DiabetesAssistant extends JFrame {
             g2.dispose();
         }
     }
+    
+ // 🆕 Ask about missing data before result
+    private boolean checkAndHandleMissingValues() {
+        boolean hasNulls = userData.values().stream().anyMatch(v -> v.equals("null"));
+        
+        if (hasNulls) {
+            int choice = JOptionPane.showConfirmDialog(this,
+                "Some values are missing. Do you want to fill them with default values?",
+                "Missing Data",
+                JOptionPane.YES_NO_OPTION);
+            	//print ();
+            if (choice == JOptionPane.YES_OPTION) {
+                fillMissingWithDefaults();  // 🆕 fill nulls with config.min
+                //callModel();
+            } else {
+            	return false;
+            }
+        }
+        
+        //  Always go to result panel after handling
+        cardLayout.show(cardPanel, "result");
+        return true;
+    }
+    
+ // Fill null values with config.min
+    private void fillMissingWithDefaults() {
+        for (MeasurementConfig config : MEASUREMENTS) {
+            if (!userData.containsKey(config.name) || userData.get(config.name).equals("null")) {
+                userData.put(config.name, String.valueOf(config.min));
+            }
+        }
+    }
+
+    private String callModel() {
+    	
+    	String [] data = new String [userData.size()];
+    	
+    	int cont = 0;
+    	data[cont] = userData.get("pregnancies");
+    	cont++;
+    	
+    	for (int i = 0; i < MEASUREMENTS.length; i++) {
+    	    String key = MEASUREMENTS[i].name;
+    	    String valueStr = userData.get(key);
+
+    	    if (valueStr != null && !valueStr.equals("null")) {
+    	       
+    	    	data[cont] = valueStr.trim();
+    	    	cont++;
+    	    } else {
+    	    	return "Can't predict using incomplete data";
+    	    }
+    	    
+    	}
+    	ProcessBuilder pb = new ProcessBuilder(
+                "python", 
+                "Model/predict_diabetes.py",
+                data[0],
+                data[1],
+                data[2],
+                data[3],
+                data[4],
+                data[5],
+                data[6],
+                data[7]
+            );
+    	// Start the process
+        try {
+			Process process = pb.start();
+			BufferedReader reader = new BufferedReader(
+		    new InputStreamReader(process.getInputStream()));
+		    String prediction = reader.readLine();
+		    
+		    return prediction;
+		} catch (IOException e) {
+			return "The model has failed to predict.";
+		}
+    	
+    }
+    
+    private void createFinalResultPanel(String prediction) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(bgColor);
+        panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+
+        JLabel title = new JLabel("Your Health Assessment Result");
+        title.setFont(new Font("SansSerif", Font.BOLD, 26));
+        title.setForeground(primaryColor);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+
+        String messageText;
+        if ("1".equalsIgnoreCase(prediction.trim())) {
+            messageText = "<html><div style='text-align: center;'>⚠️ Based on the data, there's a high chance of diabetes.<br>"
+                + "Please consult a healthcare professional soon.<br><br>"
+                + "<b>Tip:</b> Monitor your glucose, exercise regularly, and maintain a healthy diet.</div></html>";
+        } else {
+        	if (prediction.trim().equalsIgnoreCase("0")) {
+        		messageText = "<html><div style='text-align: center;'>🎉 Your numbers look good!<br>"
+                        + "Keep up with regular check-ups and healthy living.</div></html>";
+        	} else {
+        		messageText = prediction;
+        	}
+            
+        }
+
+        JLabel message = new JLabel(messageText);
+        message.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        message.setHorizontalAlignment(SwingConstants.CENTER);
+
+        RoundedButton restartBtn = new RoundedButton("↩ Restart");
+        styleButton(restartBtn, accentColor);
+        restartBtn.addActionListener(e -> {
+            userData.clear();
+            attemptCount.clear();
+            cardLayout.show(cardPanel, "welcome");
+        });
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBackground(bgColor);
+        bottomPanel.add(restartBtn);
+
+        panel.add(title, BorderLayout.NORTH);
+        panel.add(message, BorderLayout.CENTER);
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
+        cardPanel.add(panel, "result_final");
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             DiabetesAssistant app = new DiabetesAssistant();
             app.setVisible(true);
         });
-        
+ 
+
     }
 }
