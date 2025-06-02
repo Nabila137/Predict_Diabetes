@@ -1,7 +1,6 @@
 package JavaFrontEnd;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -70,10 +69,17 @@ public class DiabetesAssistant extends JFrame {
         100,
         40,
         400,
-        "<html><b>How to measure blood glucose:</b><br><br>"
-            + "1. <b>At home:</b> Use a glucose meter after 8 hours of fasting<br>"
-            + "2. <b>At pharmacy:</b> Visit any pharmacy for a quick test<br>"
-            + "3. <b>Doctor's office:</b> Schedule a blood test with your physician</html>",
+        "<html><b> What does Blood Glucose Level Mean? </b> <br>The blood glucose level is the"
+            + " amount of glucose in the blood. Glucose is a sugar that comes from the foods we"
+            + " eat, and it's also formed and stored inside the body. It's the main source of"
+            + " energy for the cells of our body, and it's carried to each cell through the"
+            + " bloodstream.<br> <br><b>How to measure blood glucose:</b><br>1. <b>At home:</b> Use"
+            + " a glucose meter and test strips. Before testing, ensure you've fasted (no eating or"
+            + " drinking except water) for 8-12 hours. Wash your hands, insert a test strip, prick"
+            + " your fingertip with a lancet, and apply a drop of blood to the strip. The meter"
+            + " will display your blood glucose level. <br>2. <b>At pharmacy:</b> Visit any"
+            + " pharmacy for a quick test<br>3. <b>Doctor's office:</b> Schedule a blood test with"
+            + " your physician</html>",
         0),
     new MeasurementConfig(
         "diastolic",
@@ -83,10 +89,24 @@ public class DiabetesAssistant extends JFrame {
         80,
         30,
         130,
-        "<html><b>How to measure blood pressure:</b><br><br>"
-            + "• Sit quietly for 5 minutes before measuring<br>"
-            + "• Place cuff on bare upper arm at heart level<br>"
-            + "• Avoid caffeine/exercise 30 minutes before</html>",
+        "<html><b> What is Diastolic Blood Pressure? </b><br>Diastolic pressure is the pressure"
+            + " during the resting phase between heartbeats. \"This pressure plays a critical role"
+            + " in helping coronary vessels supply oxygen to the heart muscle.\"<br>According to"
+            + " current guidelines, normal blood pressure is a systolic number less than 120"
+            + " millimeters of mercury (mm Hg) and a diastolic number less than 80 mm Hg. A"
+            + " systolic number of 120 to 129, with the diastolic measurement less than 80, is"
+            + " deemed \"elevated.\"<br>Diastolic blood pressure is the second, or bottom, number"
+            + " in a blood pressure reading, and it indicates the pressure in your arteries between"
+            + " heartbeats, when your heart muscle is at rest. It represents the minimum pressure"
+            + " in the arteries.<br> <br><b>How to measure blood pressure:</b><br><br>To measure"
+            + " your diastolic blood pressure at home, you'll need a blood pressure cuff and"
+            + " stethoscope, or an automatic blood pressure monitor.• Sit quietly for 5 minutes"
+            + " before measuring<br>• Palpate the brachial artery, place the stethoscope diaphragm"
+            + " over it, and inflate the cuff until you can no longer feel the pulse. Slowly"
+            + " release air and listen for the first sound (systolic pressure) and the last sound"
+            + " (diastolic pressure). <br>If you use an automatic monitor then inflate the cuff"
+            + " according to the device's instructions and wait for the reading. • Avoid"
+            + " caffeine/exercise 30 minutes before</html>",
         1),
     new MeasurementConfig(
         "skin_thickness",
@@ -96,9 +116,15 @@ public class DiabetesAssistant extends JFrame {
         25,
         5,
         60,
-        "<html><b>About skin fold measurement:</b><br><br>"
-            + "This is typically measured by health professionals<br>"
-            + "using specialized calipers at the back of your upper arm</html>",
+        "<html><b> What is Skin Thickness? </b> <br>In people with diabetes, skin thickness,"
+            + " particularly in the dermis (the layer beneath the epidermis), can be increased, a"
+            + " condition sometimes referred to as \"diabetic thick skin\" or scleredema"
+            + " diabeticorum. This thickening is due to changes in collagen and other connective"
+            + " tissue components within the skin. While some studies have shown increased skin"
+            + " thickness in diabetic patients, others have indicated no significant difference"
+            + " compared to non-diabetic individuals. <br> <br><b>About skin fold"
+            + " measurement:</b><br>This is typically measured by health professionals<br>using"
+            + " specialized calipers at the back of your upper arm</html>",
         2),
     new MeasurementConfig(
         "insulin",
@@ -108,9 +134,15 @@ public class DiabetesAssistant extends JFrame {
         25,
         0.5,
         300,
-        "<html><b>About insulin levels:</b><br><br>"
-            + "This requires a blood test ordered by your doctor.<br>"
-            + "It measures how much insulin is in your bloodstream.</html>",
+        "<html><b> What is insuline?</b><br>Insulin is a hormone produced in the pancreas that"
+            + " regulates blood sugar levels by allowing glucose to enter cells for energy. Without"
+            + " insulin, glucose builds up in the bloodstream, potentially leading to high blood"
+            + " sugar and complications like diabetes. <br>An insulin level blood test measures the"
+            + " amount of insulin hormone in your blood. Insulin helps your body use glucose from"
+            + " food for energy. The test helps doctors diagnose and monitor conditions like"
+            + " diabetes and insulin resistance, and it can be used to monitor the effectiveness of"
+            + " medications or surgery. <br> <br><b>About insulin levels:</b><br>This requires a"
+            + " blood test ordered by your doctor.<br>",
         3),
     new MeasurementConfig(
         "bmi",
@@ -120,9 +152,11 @@ public class DiabetesAssistant extends JFrame {
         24.9,
         10,
         70,
-        "<html><b>Calculating BMI:</b><br><br>"
-            + "BMI = weight(kg) / height(m)<sup>2</sup><br>"
-            + "Example: 70kg ÷ (1.75m × 1.75m) = 22.9</html>",
+        "<html><b> What is BMI?</b><br>BMI, or Body Mass Index, is a measure of body fat based on"
+            + " height and weight that applies to adults. It's a quick, inexpensive, and reliable"
+            + " way to assess whether someone is underweight, overweight, or obese."
+            + " <br><br><b>Calculating BMI:</b><br>BMI = weight(kg) /"
+            + " height(m)<sup>2</sup><br>Example: 70kg ÷ (1.75m × 1.75m) = 22.9</html>",
         4),
     new MeasurementConfig(
         "dpf",
@@ -132,9 +166,11 @@ public class DiabetesAssistant extends JFrame {
         1.2,
         0,
         3,
-        "<html><b>About this value:</b><br><br>"
-            + "This estimates genetic influence based on family history.<br>"
-            + "Your doctor can help calculate this for you.</html>",
+        "<html><b> What is Diabetes Pedigree Function</b><br>The Diabetes Pedigree Function (DPF)"
+            + " is a score that estimates the likelihood of developing diabetes based on an"
+            + " individual's family history and age.<br><br><b>About this value:</b><br>This"
+            + " estimates genetic influence based on family history.<br>Your doctor can help"
+            + " calculate this for you.</html>",
         5),
     new MeasurementConfig(
         "age",
@@ -144,7 +180,7 @@ public class DiabetesAssistant extends JFrame {
         45,
         1 /*0.083*/,
         160,
-        "<html><b>Why we ask:</b><br><br>"
+        "<html><b>Why we ask:</b><br>"
             + "Diabetes risk increases with age.<br>"
             + "We use this to personalize your assessment.</html>",
         6)
